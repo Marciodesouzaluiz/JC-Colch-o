@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <!-- Logo / Título -->
+      <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="JC Colchão"
+             style="max-height:110px;width:auto;border-radius:12px;object-fit:contain;margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,0.12);">
+        <h2 class="fw-bold" style="color:var(--jc-primary)">JC Colchão</h2>
+        <p class="text-muted">Portal de Agendamento de Entregas</p>
+      </div>
+
+      <div class="card card-portal p-4">
+        <h5 class="fw-bold mb-4 text-center">
+          <i class="bi bi-box-arrow-in-right me-2" style="color:var(--jc-primary)"></i>
+          Acesso de Fornecedor
+        </h5>
+
+        <form method="POST" action="{{ url_for('login') }}" novalidate>
+          <div class="mb-3">
+            <label class="form-label fw-500">E-mail</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" class="form-control form-control-lg"
+                     placeholder="seu@email.com.br"
+                     value="{{ request.form.get('email','') }}" required>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-500">Senha</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" name="senha" id="senha" class="form-control form-control-lg"
+                     placeholder="••••••••" required>
+              <button class="btn btn-outline-secondary" type="button"
+                      onclick="toggleSenha('senha','eyeSenha')">
+                <i class="bi bi-eye" id="eyeSenha"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-jc btn-lg">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+            </button>
+          </div>
+        </form>
+
+        <hr class="my-4">
+        <p class="text-center text-muted mb-0 small">
+          Ainda não tem conta?
+          <a href="{{ url_for('cadastro') }}" class="fw-600 text-decoration-none" style="color:var(--jc-primary)">
+            Cadastre-se aqui
+          </a>
+        </p>
+      </div>
+
+      <div class="text-center mt-3">
+        <a href="{{ url_for('index') }}" class="text-muted small text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Voltar ao início
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function toggleSenha(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon  = document.getElementById(iconId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.replace('bi-eye-slash', 'bi-eye');
+    }
+  }
+</script>
+{% endblock %}

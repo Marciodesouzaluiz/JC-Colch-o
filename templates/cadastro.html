@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Cadastro de Fornecedor{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+
+      <div class="text-center mb-4">
+        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+             style="width:80px;height:80px;background:var(--jc-primary);">
+          <i class="bi bi-person-plus text-white fs-2"></i>
+        </div>
+        <h2 class="fw-bold" style="color:var(--jc-primary)">Cadastro de Fornecedor</h2>
+        <p class="text-muted">Preencha os dados para criar sua conta no portal</p>
+      </div>
+
+      <div class="card card-portal p-4">
+        <form method="POST" action="{{ url_for('cadastro') }}" novalidate>
+
+          <!-- Dados da Empresa -->
+          <h6 class="fw-bold mb-3 text-uppercase small" style="color:var(--jc-primary);letter-spacing:.08em;">
+            <i class="bi bi-building me-1"></i>Dados da Empresa
+          </h6>
+
+          <div class="mb-3">
+            <label class="form-label fw-500">Razão Social <span class="text-danger">*</span></label>
+            <input type="text" name="razao_social" class="form-control"
+                   placeholder="Nome completo da empresa"
+                   value="{{ form.get('razao_social','') }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-500">CNPJ <span class="text-danger">*</span></label>
+            <input type="text" name="cnpj" class="form-control" id="cnpj"
+                   placeholder="00.000.000/0000-00"
+                   value="{{ form.get('cnpj','') }}" maxlength="18" required>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-500">Telefone / WhatsApp</label>
+              <input type="text" name="telefone" class="form-control" id="telefone"
+                     placeholder="(00) 00000-0000"
+                     value="{{ form.get('telefone','') }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-500">Nome do Responsável</label>
+              <input type="text" name="contato" class="form-control"
+                     placeholder="Seu nome"
+                     value="{{ form.get('contato','') }}">
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <!-- Acesso ao Portal -->
+          <h6 class="fw-bold mb-3 text-uppercase small" style="color:var(--jc-primary);letter-spacing:.08em;">
+            <i class="bi bi-shield-lock me-1"></i>Dados de Acesso
+          </h6>
+
+          <div class="mb-3">
+            <label class="form-label fw-500">E-mail <span class="text-danger">*</span></label>
+            <input type="email" name="email" class="form-control"
+                   placeholder="email@empresa.com.br"
+                   value="{{ form.get('email','') }}" required>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-500">Senha <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="password" name="senha" id="senha" class="form-control"
+                       placeholder="Mín. 6 caracteres" required minlength="6">
+                <button class="btn btn-outline-secondary" type="button"
+                        onclick="toggleSenha('senha','eye1')">
+                  <i class="bi bi-eye" id="eye1"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-500">Confirmar Senha <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="password" name="confirmar_senha" id="confirmar_senha" class="form-control"
+                       placeholder="Repita a senha" required>
+                <button class="btn btn-outline-secondary" type="button"
+                        onclick="toggleSenha('confirmar_senha','eye2')">
+                  <i class="bi bi-eye" id="eye2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info d-flex gap-2 py-2 small">
+            <i class="bi bi-info-circle-fill mt-1 flex-shrink-0"></i>
+            <span>Ao se cadastrar, você concorda com as políticas de uso do Portal de Entregas JC Colchão.</span>
+          </div>
+
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-jc btn-lg">
+              <i class="bi bi-person-check me-2"></i>Criar Minha Conta
+            </button>
+          </div>
+        </form>
+
+        <hr class="my-4">
+        <p class="text-center text-muted mb-0 small">
+          Já tem conta?
+          <a href="{{ url_for('login') }}" class="fw-600 text-decoration-none" style="color:var(--jc-primary)">
+            Fazer login
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Mostra/oculta senha
+  function toggleSenha(id, eyeId) {
+    const el = document.getElementById(id);
+    const ic = document.getElementById(eyeId);
+    el.type = el.type === 'password' ? 'text' : 'password';
+    ic.classList.toggle('bi-eye');
+    ic.classList.toggle('bi-eye-slash');
+  }
+
+  // Máscara CNPJ
+  document.getElementById('cnpj').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'');
+    v = v.replace(/^(\d{2})(\d)/,'$1.$2');
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');
+    v = v.replace(/\.(\d{3})(\d)/,'.$1/$2');
+    v = v.replace(/(\d{4})(\d)/,'$1-$2');
+    this.value = v;
+  });
+
+  // Máscara Telefone
+  document.getElementById('telefone').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'');
+    v = v.replace(/^(\d{2})(\d)/,'($1) $2');
+    v = v.replace(/(\d{5})(\d)/,'$1-$2');
+    this.value = v;
+  });
+</script>
+{% endblock %}

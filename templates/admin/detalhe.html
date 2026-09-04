@@ -1,0 +1,211 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Agendamento {{ ag.codigo }}{% endblock %}
+{% block page_title %}<i class="bi bi-file-text me-2"></i>Agendamento {{ ag.codigo }}{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+  <a href="{{ url_for('admin_agendamentos') }}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left me-1"></i>Voltar à lista
+  </a>
+</div>
+
+<div class="row g-4">
+  <!-- Coluna Principal -->
+  <div class="col-lg-8">
+
+    <!-- Info Fornecedor -->
+    <div class="card card-admin mb-4">
+      <div class="card-header bg-white py-3">
+        <h6 class="fw-bold mb-0" style="color:var(--jc-primary)">
+          <i class="bi bi-building me-2"></i>Fornecedor
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="text-muted small">Razão Social</div>
+            <div class="fw-bold">{{ ag.fornecedor.razao_social }}</div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-muted small">CNPJ</div>
+            <div class="fw-bold">{{ ag.fornecedor.cnpj }}</div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-muted small">E-mail</div>
+            <div>{{ ag.fornecedor.email }}</div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-muted small">Telefone</div>
+            <div>{{ ag.fornecedor.telefone or '—' }}</div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-muted small">Responsável</div>
+            <div>{{ ag.fornecedor.contato or '—' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dados da Entrega -->
+    <div class="card card-admin mb-4">
+      <div class="card-header bg-white py-3">
+        <h6 class="fw-bold mb-0" style="color:var(--jc-primary)">
+          <i class="bi bi-box-seam me-2"></i>Dados da Entrega
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-sm-4">
+            <div class="text-muted small">Data</div>
+            <div class="fw-bold">{{ ag.data_entrega.strftime('%d/%m/%Y') }}</div>
+          </div>
+          <div class="col-sm-4">
+            <div class="text-muted small">Horário</div>
+            <div class="fw-bold">{{ ag.hora_entrega }}</div>
+          </div>
+          <div class="col-sm-4">
+            <div class="text-muted small">Nº Nota Fiscal</div>
+            <div class="fw-bold">{{ ag.num_nota_fiscal }}</div>
+          </div>
+          <div class="col-sm-4">
+            <div class="text-muted small">Valor NF</div>
+            <div class="fw-bold">R$ {{ "%.2f"|format(ag.valor_nota) }}</div>
+          </div>
+          <div class="col-sm-4">
+            <div class="text-muted small">Qtd. Volumes</div>
+            <div class="fw-bold">{{ ag.qtd_volumes }}</div>
+          </div>
+          <div class="col-sm-4">
+            <div class="text-muted small">Peso Total</div>
+            <div class="fw-bold">{{ ag.peso_total_kg or '—' }} kg</div>
+          </div>
+          {% if ag.tipo_mercadoria %}
+          <div class="col-12">
+            <div class="text-muted small">Tipo de Mercadoria</div>
+            <div>{{ ag.tipo_mercadoria }}</div>
+          </div>
+          {% endif %}
+          {% if ag.observacoes %}
+          <div class="col-12">
+            <div class="text-muted small">Observações do Fornecedor</div>
+            <div>{{ ag.observacoes }}</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Transportadora -->
+    <div class="card card-admin mb-4">
+      <div class="card-header bg-white py-3">
+        <h6 class="fw-bold mb-0" style="color:var(--jc-primary)">
+          <i class="bi bi-truck me-2"></i>Transportadora / Motorista
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="text-muted small">Transportadora</div>
+            <div>{{ ag.transportadora or '—' }}</div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-muted small">Placa</div>
+            <div>{{ ag.placa_veiculo or '—' }}</div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-muted small">Motorista</div>
+            <div>{{ ag.nome_motorista or '—' }}</div>
+          </div>
+          <div class="col-sm-6">
+            <div class="text-muted small">CPF Motorista</div>
+            <div>{{ ag.cpf_motorista or '—' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Coluna Lateral -->
+  <div class="col-lg-4">
+
+    <!-- Status atual -->
+    <div class="card card-admin mb-4">
+      <div class="card-header bg-white py-3">
+        <h6 class="fw-bold mb-0" style="color:var(--jc-primary)">
+          <i class="bi bi-arrow-repeat me-2"></i>Alterar Status
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          {% set s = ag.status %}
+          <span class="badge rounded-pill fs-6 px-3 py-2
+            {% if s == 'Aguardando Aprovação' %}badge-aguardando
+            {% elif s == 'Aprovado' %}badge-aprovado
+            {% elif s == 'Reprovado' %}badge-reprovado
+            {% elif s == 'Cancelado' %}badge-cancelado
+            {% elif s == 'Entregue' %}badge-entregue
+            {% endif %}">
+            Status atual: {{ s }}
+          </span>
+        </div>
+        <form method="POST" action="{{ url_for('admin_mudar_status', ag_id=ag.id) }}">
+          <div class="mb-3">
+            <label class="form-label fw-500">Novo Status</label>
+            <select name="status" class="form-select" required>
+              {% for opt in ['Aguardando Aprovação','Aprovado','Reprovado','Entregue','Cancelado'] %}
+              <option value="{{ opt }}" {% if ag.status == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-500">Observação (opcional)</label>
+            <textarea name="obs_admin" class="form-control" rows="3"
+                      placeholder="Motivo da reprovação, instrução, etc.">{{ ag.obs_admin or '' }}</textarea>
+          </div>
+          <button type="submit" class="btn btn-dark w-100 fw-bold">
+            <i class="bi bi-save me-2"></i>Salvar Status
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Nota Fiscal -->
+    <div class="card card-admin mb-4">
+      <div class="card-header bg-white py-3">
+        <h6 class="fw-bold mb-0" style="color:var(--jc-primary)">
+          <i class="bi bi-file-earmark-text me-2"></i>Nota Fiscal
+        </h6>
+      </div>
+      <div class="card-body text-center">
+        {% if ag.arquivo_nf %}
+          <i class="bi bi-file-earmark-check display-3 text-success d-block mb-2"></i>
+          <p class="small text-muted mb-3">{{ ag.arquivo_nf_original }}</p>
+          <a href="{{ url_for('download_arquivo', filename=ag.arquivo_nf) }}"
+             class="btn btn-outline-primary w-100">
+            <i class="bi bi-download me-2"></i>Baixar NF
+          </a>
+        {% else %}
+          <i class="bi bi-file-earmark-x display-3 text-muted d-block mb-2"></i>
+          <p class="text-muted small">Sem arquivo</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Datas -->
+    <div class="card card-admin">
+      <div class="card-body">
+        <div class="mb-2">
+          <div class="text-muted small">Criado em</div>
+          <div class="fw-500">{{ ag.criado_em.strftime('%d/%m/%Y às %H:%M') }}</div>
+        </div>
+        <div>
+          <div class="text-muted small">Última atualização</div>
+          <div class="fw-500">{{ ag.atualizado_em.strftime('%d/%m/%Y às %H:%M') }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

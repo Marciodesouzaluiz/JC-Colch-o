@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    <h4 class="fw-bold mb-0" style="color:var(--jc-primary)">
+      <i class="bi bi-person-gear me-2"></i>Meu Perfil
+    </h4>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card card-portal p-4">
+        <form method="POST" action="{{ url_for('perfil') }}">
+
+          <h6 class="fw-bold mb-3 text-uppercase small" style="color:var(--jc-primary);letter-spacing:.08em;">
+            <i class="bi bi-building me-1"></i>Dados da Empresa
+          </h6>
+
+          <div class="mb-3">
+            <label class="form-label fw-500">Razão Social</label>
+            <input type="text" name="razao_social" class="form-control"
+                   value="{{ fornecedor_atual.razao_social }}" required>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-500">CNPJ</label>
+              <input type="text" class="form-control" value="{{ fornecedor_atual.cnpj }}" disabled>
+              <div class="form-text">O CNPJ não pode ser alterado.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-500">E-mail</label>
+              <input type="email" class="form-control" value="{{ fornecedor_atual.email }}" disabled>
+              <div class="form-text">Para alterar o e-mail, contate o suporte.</div>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-500">Telefone / WhatsApp</label>
+              <input type="text" name="telefone" class="form-control"
+                     value="{{ fornecedor_atual.telefone or '' }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-500">Nome do Responsável</label>
+              <input type="text" name="contato" class="form-control"
+                     value="{{ fornecedor_atual.contato or '' }}">
+            </div>
+          </div>
+
+          <hr class="my-4">
+          <h6 class="fw-bold mb-3 text-uppercase small" style="color:var(--jc-primary);letter-spacing:.08em;">
+            <i class="bi bi-shield-lock me-1"></i>Alterar Senha (opcional)
+          </h6>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-500">Nova Senha</label>
+              <input type="password" name="nova_senha" class="form-control"
+                     placeholder="Mín. 6 caracteres (deixe em branco para não alterar)">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-500">Confirmar Nova Senha</label>
+              <input type="password" name="confirmar_senha" class="form-control"
+                     placeholder="Repita a nova senha">
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 justify-content-end">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary px-4">Cancelar</a>
+            <button type="submit" class="btn btn-jc px-5">
+              <i class="bi bi-save me-2"></i>Salvar Alterações
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card card-portal p-4 text-center">
+        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mx-auto mb-3"
+             style="width:90px;height:90px;background:var(--jc-light);">
+          <i class="bi bi-building fs-1" style="color:var(--jc-primary)"></i>
+        </div>
+        <h5 class="fw-bold">{{ fornecedor_atual.razao_social }}</h5>
+        <p class="text-muted small mb-1">{{ fornecedor_atual.cnpj }}</p>
+        <p class="text-muted small mb-3">{{ fornecedor_atual.email }}</p>
+        <span class="badge bg-success rounded-pill px-3">Conta Ativa</span>
+        <hr>
+        <div class="text-start small">
+          <div class="d-flex justify-content-between mb-1">
+            <span class="text-muted">Membro desde</span>
+            <span class="fw-500">{{ fornecedor_atual.criado_em.strftime('%d/%m/%Y') }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

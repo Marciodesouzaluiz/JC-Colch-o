@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% block title %}Novo Agendamento{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <!-- Cabeçalho -->
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    <div>
+      <h4 class="fw-bold mb-0" style="color:var(--jc-primary)">
+        <i class="bi bi-calendar-plus me-2"></i>Novo Agendamento de Entrega
+      </h4>
+      <p class="text-muted mb-0 small">Preencha todas as informações para agendar sua entrega</p>
+    </div>
+  </div>
+
+  <!-- Progresso -->
+  <div class="card card-portal p-4 mb-4" style="background:linear-gradient(135deg,var(--jc-primary),#0a2347);color:#fff;">
+    <div class="row g-3 text-center">
+      <div class="col-4">
+        <div class="fw-bold"><i class="bi bi-1-circle-fill me-1"></i>Dados da Entrega</div>
+      </div>
+      <div class="col-4">
+        <div style="opacity:.6"><i class="bi bi-2-circle me-1"></i>Transportadora</div>
+      </div>
+      <div class="col-4">
+        <div style="opacity:.6"><i class="bi bi-3-circle me-1"></i>Nota Fiscal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-portal p-4">
+    <form method="POST" action="{{ url_for('novo_agendamento') }}"
+          enctype="multipart/form-data" novalidate id="formAgendamento">
+
+      <!-- ── SEÇÃO 1: Dados da Entrega ─────────────────────────── -->
+      <h6 class="fw-bold mb-3 text-uppercase small" style="color:var(--jc-primary);letter-spacing:.08em;">
+        <i class="bi bi-box-seam me-1"></i>Dados da Mercadoria
+      </h6>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-500">Data de Entrega <span class="text-danger">*</span></label>
+          <input type="date" name="data_entrega" class="form-control"
+                 min="{{ min_data }}" max="{{ max_data }}"
+                 value="{{ form.get('data_entrega','') }}" required>
+          <div class="form-text">Entregas aceitas de D+1 até 60 dias à frente.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-500">Horário Preferencial <span class="text-danger">*</span></label>
+          <select name="hora_entrega" class="form-select" required>
+            <option value="">Selecione o horário</option>
+            <option value="de 07:30 - 08:30" {% if form.get('hora_entrega')=='de 07:30 - 08:30' %}selected{% endif %}>de 07:30 - 08:30</option>
+            <option value="de 08:31 - 09:30" {% if form.get('hora_entrega')=='de 08:31 - 09:30' %}selected{% endif %}>de 08:31 - 09:30</option>
+            <option value="de 09:31 - 10:30" {% if form.get('hora_entrega')=='de 09:31 - 10:30' %}selected{% endif %}>de 09:31 - 10:30</option>
+            <option value="de 10:31 - 11:20" {% if form.get('hora_entrega')=='de 10:31 - 11:20' %}selected{% endif %}>de 10:31 - 11:20</option>
+            <option value="de 12:31 - 13:30" {% if form.get('hora_entrega')=='de 12:31 - 13:30' %}selected{% endif %}>de 12:31 - 13:30</option>
+            <option value="de 13:31 - 14:30" {% if form.get('hora_entrega')=='de 13:31 - 14:30' %}selected{% endif %}>de 13:31 - 14:30</option>
+            <option value="de 14:31 - 15:30" {% if form.get('hora_entrega')=='de 14:31 - 15:30' %}selected{% endif %}>de 14:31 - 15:30</option>
+            <option value="de 15:31 - 16:30" {% if form.get('hora_entrega')=='de 15:31 - 16:30' %}selected{% endif %}>de 15:31 - 16:30</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <label class="form-label fw-500">Nº da Nota Fiscal <span class="text-danger">*</span></label>
+          <input type="text" name="num_nota_fiscal" class="form-control"
+                 placeholder="Ex: 123456"
+                 value="{{ form.get('num_nota_fiscal','') }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-500">Valor da NF (R$) <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text">R$</span>
+            <input type="text" name="valor_nota" class="form-control" id="valorNota"
+                   placeholder="0,00"
+                   value="{{ form.get('valor_nota','') }}" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-500">Tipo de Mercadoria</label>
+          <input type="text" name="tipo_mercadoria" class="form-control"
+                 placeholder="Ex: Colchões, Box, etc."
+                 value="{{ form.get('tipo_mercadoria','') }}">
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <label class="form-label fw-500">Qtd. de Volumes <span class="text-danger">*</span></label>
+          <input type="number" name="qtd_volumes" class="form-control"
+                 placeholder="0" min="1"
+                 value="{{ form.get('qtd_volumes','') }}" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-500">Peso Total (kg)</label>
+          <div class="input-group">
+            <input type="text" name="peso_total_kg" class="form-control"
+                   placeholder="0,00"
+                   value="{{ form.get('peso_total_kg','') }}">
+            <span class="input-group-text">kg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 2: Transportadora ────────────────────────────── -->
+      <hr class="my-4">
+      <h6 class="fw-bold mb-3 text-uppercase small" style="color:var(--jc-primary);letter-spacing:.08em;">
+        <i class="bi bi-truck me-1"></i>Dados da Transportadora
+      </h6>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-500">Transportadora</label>
+          <input type="text" name="transportadora" class="form-control"
+                 placeholder="Nome da transportadora ou Conta Própria"
+                 value="{{ form.get('transportadora','') }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-500">Placa do Veículo</label>
+          <input type="text" name="placa_veiculo" class="form-control" id="placaVeiculo"
+                 placeholder="AAA-0000 ou ABC1D23"
+                 value="{{ form.get('placa_veiculo','') }}" maxlength="8">
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label fw-500">Nome do Motorista</label>
+          <input type="text" name="nome_motorista" class="form-control"
+                 placeholder="Nome completo"
+                 value="{{ form.get('nome_motorista','') }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-500">CPF do Motorista</label>
+          <input type="text" name="cpf_motorista" class="form-control" id="cpfMotorista"
+                 placeholder="000.000.000-00"
+                 value="{{ form.get('cpf_motorista','') }}" maxlength="14">
+        </div>
+      </div>
+
+      <!-- ── SEÇÃO 3: Nota Fiscal ───────────────────────────────── -->
+      <hr class="my-4">
+      <h6 class="fw-bold mb-3 text-uppercase small" style="color:var(--jc-primary);letter-spacing:.08em;">
+        <i class="bi bi-file-earmark-text me-1"></i>Nota Fiscal — Anexo <span class="text-danger">*</span>
+      </h6>
+
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('arquivo_nf').click()">
+        <i class="bi bi-cloud-upload d-block mb-3"></i>
+        <p class="fw-500 mb-1" id="uploadText">Clique aqui ou arraste o arquivo</p>
+        <p class="text-muted small mb-0">Formatos aceitos: PDF, XML, PNG, JPG, JPEG · Máx. 10 MB</p>
+      </div>
+      <input type="file" name="arquivo_nf" id="arquivo_nf" class="d-none"
+             accept=".pdf,.xml,.png,.jpg,.jpeg" required>
+      <div id="arquivoSelecionado" class="mt-2 d-none">
+        <div class="alert alert-success py-2 d-flex align-items-center gap-2 mb-0">
+          <i class="bi bi-file-check-fill"></i>
+          <span id="nomeArquivo"></span>
+          <button type="button" class="btn-close ms-auto btn-sm" onclick="removerArquivo()"></button>
+        </div>
+      </div>
+
+      <!-- Observações -->
+      <hr class="my-4">
+      <div class="mb-4">
+        <label class="form-label fw-500">Observações</label>
+        <textarea name="observacoes" class="form-control" rows="3"
+                  placeholder="Informações adicionais sobre a entrega...">{{ form.get('observacoes','') }}</textarea>
+      </div>
+
+      <!-- Resumo / Botões -->
+      <div class="d-flex gap-3 justify-content-end flex-wrap">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary px-4">
+          <i class="bi bi-x-circle me-2"></i>Cancelar
+        </a>
+        <button type="submit" class="btn btn-jc btn-lg px-5" id="btnEnviar">
+          <i class="bi bi-send me-2"></i>Enviar Agendamento
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Upload drag-and-drop
+  const zone   = document.getElementById('uploadZone');
+  const input  = document.getElementById('arquivo_nf');
+  const info   = document.getElementById('arquivoSelecionado');
+  const nomeEl = document.getElementById('nomeArquivo');
+  const txt    = document.getElementById('uploadText');
+
+  input.addEventListener('change', () => mostrarArquivo(input.files[0]));
+
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor='var(--jc-primary)'; });
+  zone.addEventListener('dragleave', () => { zone.style.borderColor=''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.style.borderColor='';
+    if (e.dataTransfer.files.length) {
+      input.files = e.dataTransfer.files;
+      mostrarArquivo(e.dataTransfer.files[0]);
+    }
+  });
+
+  function mostrarArquivo(file) {
+    if (!file) return;
+    nomeEl.textContent = file.name + ' (' + (file.size/1024/1024).toFixed(2) + ' MB)';
+    info.classList.remove('d-none');
+    txt.textContent = 'Arquivo selecionado';
+    zone.style.borderColor = 'var(--jc-primary)';
+  }
+
+  function removerArquivo() {
+    input.value = '';
+    info.classList.add('d-none');
+    txt.textContent = 'Clique aqui ou arraste o arquivo';
+    zone.style.borderColor = '';
+  }
+
+  // Máscara CPF
+  document.getElementById('cpfMotorista').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'');
+    v = v.replace(/(\d{3})(\d)/,'$1.$2');
+    v = v.replace(/(\d{3})(\d)/,'$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+    this.value = v;
+  });
+
+  // Carregando no submit
+  document.getElementById('formAgendamento').addEventListener('submit', function() {
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+  });
+</script>
+{% endblock %}

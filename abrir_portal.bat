@@ -1,0 +1,3 @@
+@echo off
+echo Abrindo o portal sem o bloqueio do proxy...
+start msedge --user-data-dir="%TEMP%\jccolchao_profile" --proxy-bypass-list="localhost,127.0.0.1,::1" "http://localhost:5000/admin/login"

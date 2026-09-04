@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Admin — Login{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="JC Colchão"
+             style="max-height:100px;width:auto;border-radius:12px;object-fit:contain;margin-bottom:12px;box-shadow:0 4px 16px rgba(0,0,0,0.12);">
+        <h3 class="fw-bold">Área Administrativa</h3>
+        <p class="text-muted small">JC Colchão — Portal de Entregas</p>
+      </div>
+      <div class="card card-portal p-4">
+        <form method="POST" action="{{ url_for('admin_login') }}">
+          <div class="mb-3">
+            <label class="form-label fw-500">E-mail do Administrador</label>
+            <input type="email" name="email" class="form-control" placeholder="admin@jccolchao.com.br" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-500">Senha</label>
+            <input type="password" name="senha" class="form-control" placeholder="••••••••" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-dark btn-lg fw-bold">
+              <i class="bi bi-box-arrow-in-right me-2"></i>Entrar como Administrador
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="text-center mt-3">
+        <a href="{{ url_for('index') }}" class="text-muted small text-decoration-none">
+          <i class="bi bi-arrow-left me-1"></i>Voltar ao portal
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

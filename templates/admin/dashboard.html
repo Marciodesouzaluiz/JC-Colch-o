@@ -1,0 +1,101 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard Administrativo{% endblock %}
+{% block page_title %}<i class="bi bi-speedometer2 me-2"></i>Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Stats -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg col-xl">
+    <div class="stat-card" style="background:linear-gradient(135deg,#1a4f8a,#0a2347)">
+      <div class="sv">{{ stats.total }}</div>
+      <div class="sl"><i class="bi bi-calendar3 me-1"></i>Total de Agendamentos</div>
+    </div>
+  </div>
+  <div class="col-6 col-lg col-xl">
+    <div class="stat-card" style="background:linear-gradient(135deg,#d97706,#92400e)">
+      <div class="sv">{{ stats.aguardando }}</div>
+      <div class="sl"><i class="bi bi-hourglass me-1"></i>Aguardando</div>
+    </div>
+  </div>
+  <div class="col-6 col-lg col-xl">
+    <div class="stat-card" style="background:linear-gradient(135deg,#059669,#064e3b)">
+      <div class="sv">{{ stats.aprovados }}</div>
+      <div class="sl"><i class="bi bi-check-circle me-1"></i>Aprovados</div>
+    </div>
+  </div>
+  <div class="col-6 col-lg col-xl">
+    <div class="stat-card" style="background:linear-gradient(135deg,#2563eb,#1e3a8a)">
+      <div class="sv">{{ stats.entregues }}</div>
+      <div class="sl"><i class="bi bi-truck me-1"></i>Entregues</div>
+    </div>
+  </div>
+  <div class="col-6 col-lg col-xl">
+    <div class="stat-card" style="background:linear-gradient(135deg,#dc2626,#7f1d1d)">
+      <div class="sv">{{ stats.reprovados }}</div>
+      <div class="sl"><i class="bi bi-x-circle me-1"></i>Reprovados</div>
+    </div>
+  </div>
+</div>
+
+<!-- Agendamentos Recentes -->
+<div class="card card-admin">
+  <div class="card-header bg-white d-flex align-items-center justify-content-between py-3">
+    <h6 class="fw-bold mb-0" style="color:var(--jc-primary)">
+      <i class="bi bi-clock-history me-2"></i>Agendamentos Recentes
+    </h6>
+    <a href="{{ url_for('admin_agendamentos') }}" class="btn btn-sm btn-outline-primary">
+      Ver todos <i class="bi bi-arrow-right ms-1"></i>
+    </a>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Código</th>
+            <th>Fornecedor</th>
+            <th>Data Entrega</th>
+            <th>NF</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th class="text-end">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ag in recentes %}
+          <tr>
+            <td><code class="fw-bold">{{ ag.codigo }}</code></td>
+            <td>
+              <div class="fw-500">{{ ag.fornecedor.razao_social[:30] }}</div>
+              <div class="small text-muted">{{ ag.fornecedor.cnpj }}</div>
+            </td>
+            <td>{{ ag.data_entrega.strftime('%d/%m/%Y') }}</td>
+            <td>{{ ag.num_nota_fiscal }}</td>
+            <td>R$ {{ "%.2f"|format(ag.valor_nota) }}</td>
+            <td>
+              {% set s = ag.status %}
+              <span class="badge rounded-pill
+                {% if s == 'Aguardando Aprovação' %}badge-aguardando
+                {% elif s == 'Aprovado' %}badge-aprovado
+                {% elif s == 'Reprovado' %}badge-reprovado
+                {% elif s == 'Cancelado' %}badge-cancelado
+                {% elif s == 'Entregue' %}badge-entregue
+                {% endif %}">{{ s }}</span>
+            </td>
+            <td class="text-end">
+              <a href="{{ url_for('admin_detalhe', ag_id=ag.id) }}"
+                 class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-eye"></i>
+              </a>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="7" class="text-center py-4 text-muted">Nenhum agendamento ainda.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

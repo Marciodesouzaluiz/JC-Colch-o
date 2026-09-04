@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container text-center position-relative">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="mb-4">
+          <span class="badge rounded-pill px-3 py-2 mb-3" style="background:rgba(255,214,10,.2);color:#ffd60a;font-size:.85rem;">
+            <i class="bi bi-truck me-1"></i> Portal Exclusivo para Fornecedores
+          </span>
+        </div>
+        <div class="mb-4">
+          <img src="{{ url_for('static', filename='img/logo.jpeg') }}" alt="Logomarca" style="max-height: 120px; border-radius: 8px;">
+        </div>
+        <h1 class="display-4 fw-bold mb-3">
+          Portal de Agendamento<br>
+          <span style="color:var(--jc-accent)">de Entregas</span>
+        </h1>
+        <p class="lead mb-4" style="opacity:.88;">
+          Agende suas entregas de forma rápida e organizada.<br>
+          Anexe sua nota fiscal e acompanhe o status em tempo real.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a href="{{ url_for('login') }}" class="btn btn-warning btn-lg fw-bold px-4">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Entrar no Portal
+          </a>
+          <a href="{{ url_for('cadastro') }}" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-person-plus me-2"></i>Cadastrar-se
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold" style="color:var(--jc-primary)">Como funciona?</h2>
+      <p class="text-muted">Simples, rápido e seguro</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card card-portal h-100 text-center p-4">
+          <div class="mb-3">
+            <span class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                  style="width:70px;height:70px;background:#eef4ff;">
+              <i class="bi bi-person-check fs-2" style="color:var(--jc-primary)"></i>
+            </span>
+          </div>
+          <h5 class="fw-bold">1. Faça login</h5>
+          <p class="text-muted small mb-0">
+            Acesse o portal com e-mail e senha cadastrados.<br>
+            Ainda não tem conta? Cadastre-se gratuitamente.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-portal h-100 text-center p-4">
+          <div class="mb-3">
+            <span class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                  style="width:70px;height:70px;background:#fff5e6;">
+              <i class="bi bi-calendar-plus fs-2" style="color:#f59e0b"></i>
+            </span>
+          </div>
+          <h5 class="fw-bold">2. Agende a entrega</h5>
+          <p class="text-muted small mb-0">
+            Informe data, horário, dados da mercadoria e da transportadora.
+            Anexe a nota fiscal (PDF ou imagem).
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-portal h-100 text-center p-4">
+          <div class="mb-3">
+            <span class="rounded-circle d-inline-flex align-items-center justify-content-center"
+                  style="width:70px;height:70px;background:#f0fff4;">
+              <i class="bi bi-check2-circle fs-2" style="color:#10b981"></i>
+            </span>
+          </div>
+          <h5 class="fw-bold">3. Acompanhe o status</h5>
+          <p class="text-muted small mb-0">
+            Receba aprovação da equipe JC Colchão e acompanhe cada etapa
+            do agendamento diretamente no portal.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Informações -->
+<section class="py-5" style="background:#fff;">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6">
+        <h3 class="fw-bold mb-3" style="color:var(--jc-primary)">
+          <i class="bi bi-shield-check me-2"></i>Portal seguro e prático
+        </h3>
+        <ul class="list-unstyled">
+          <li class="d-flex align-items-start gap-2 mb-3">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Agendamento online 24 horas por dia, 7 dias por semana</span>
+          </li>
+          <li class="d-flex align-items-start gap-2 mb-3">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Upload seguro de nota fiscal (PDF, XML, imagem)</span>
+          </li>
+          <li class="d-flex align-items-start gap-2 mb-3">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Histórico completo de todos os seus agendamentos</span>
+          </li>
+          <li class="d-flex align-items-start gap-2 mb-3">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Acompanhamento em tempo real do status da entrega</span>
+          </li>
+          <li class="d-flex align-items-start gap-2 mb-3">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span>Código único de agendamento para rastreamento</span>
+          </li>
+        </ul>
+        <a href="{{ url_for('cadastro') }}" class="btn btn-jc mt-2">
+          <i class="bi bi-person-plus me-2"></i>Criar minha conta
+        </a>
+      </div>
+      <div class="col-lg-6 text-center">
+        <div class="p-5 rounded-4" style="background:var(--jc-light);">
+          <i class="bi bi-truck display-1" style="color:var(--jc-primary);opacity:.3"></i>
+          <div class="row g-3 mt-3">
+            <div class="col-6">
+              <div class="bg-white rounded-3 p-3 shadow-sm">
+                <div class="fw-bold fs-4" style="color:var(--jc-primary)">100%</div>
+                <div class="small text-muted">Online</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-white rounded-3 p-3 shadow-sm">
+                <div class="fw-bold fs-4" style="color:#10b981">Seguro</div>
+                <div class="small text-muted">e Confiável</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5" style="background:linear-gradient(135deg,var(--jc-primary),#0a2347);">
+  <div class="container text-center text-white">
+    <h3 class="fw-bold mb-3">Pronto para agendar sua entrega?</h3>
+    <p class="mb-4" style="opacity:.85">Acesse o portal e garanta sua data e horário agora mesmo.</p>
+    <a href="{{ url_for('login') }}" class="btn btn-warning btn-lg fw-bold px-5">
+      <i class="bi bi-box-arrow-in-right me-2"></i>Acessar Portal
+    </a>
+  </div>
+</section>
+{% endblock %}
