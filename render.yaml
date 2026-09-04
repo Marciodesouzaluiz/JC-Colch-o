@@ -28,3 +28,4 @@ databases:
   - name: jccolchao-db
     plan: free
     databaseName: jccolchao
+    postgresMajorVersion: "16"
